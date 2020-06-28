@@ -3,7 +3,9 @@ import { BloodExamData, TestPrediction } from "./types";
 
 const api = axios.create({
   baseURL:
-    process.env.NODE_ENV === "production" ? "http://localhost:4000" : "http://localhost:3000",
+    process.env.NODE_ENV === "production"
+      ? "https://covid-276819.rj.r.appspot.com/"
+      : "http://localhost:3000",
 });
 
 export const ServiceApi = {
