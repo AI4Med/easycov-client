@@ -1,25 +1,49 @@
 import React from "react";
-import { Header, Form, Button } from "semantic-ui-react";
-import { BloodExamField } from "../../service/blood-exam-fields";
+import { Form, Button, Input } from "semantic-ui-react";
 import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
+import { BloodExamSpecification } from "../../service/types";
+import styled from "styled-components";
+
+const mustBeNumber = () => new Yup.number("Must be a number").required("Required");
+
+const FormFieldContainer = styled.div`
+  padding: 10px;
+  marginbottom: 10;
+  display: flex;
+  flexdirection: row;
+  justifycontent: space-evenly;
+`;
+
+const FormLabel = styled.label`
+  flex: 1;
+`;
+
+const FormRightLabel = styled.label`
+  margin-left: 10px;
+  flex: 1;
+`;
 
 interface BloodExamFormProps {
-  fields: BloodExamField[];
+  specification: BloodExamSpecification;
   onSubmit: (bloodExamData: any) => void;
 }
 
-const BloodExamForm: React.FC<BloodExamFormProps> = ({ fields, onSubmit }) => {
+/** The blood exam form is rendered based on a specification sent by the server. */
+const BloodExamForm: React.FC<BloodExamFormProps> = ({ specification, onSubmit }) => {
   /** Convert list of fields to Formik's initial values */
-  const initialValues = fields.reduce<{ [x: string]: number }>((accumulator, currentValue) => {
-    accumulator[currentValue.key] = 0.0;
-    return accumulator;
-  }, {});
+  const initialValues = Object.keys(specification).reduce<{ [x: string]: number }>(
+    (accumulator, currentValue) => {
+      accumulator[currentValue] = 0.0;
+      return accumulator;
+    },
+    {}
+  );
 
   /** Convert list of fields to Yup schema */
   const validationSchema = Yup.object(
-    fields.reduce<{ [x: string]: string }>((accumulator, currentValue) => {
-      accumulator[currentValue.key] = currentValue.validator;
+    Object.keys(specification).reduce<{ [x: string]: string }>((accumulator, currentValue) => {
+      accumulator[currentValue] = mustBeNumber();
       return accumulator;
     }, {})
   );
@@ -39,26 +63,34 @@ const BloodExamForm: React.FC<BloodExamFormProps> = ({ fields, onSubmit }) => {
         {(formik) => (
           <Form onSubmit={formik.handleSubmit}>
             <div style={{ marginBottom: 20 }}>
-              {fields.map((field) => (
-                <div style={{ marginBottom: 10 }} key={field.key}>
-                  <label htmlFor={field.key}>{field.name}</label>
-                  <input
-                    type="number"
-                    step="any"
-                    id={field.key}
-                    {...formik.getFieldProps(field.key)}
-                  />
-                  {/*
-                //@ts-ignore*/}
-                  {formik.touched[field.key] && formik.errors[field.key] ? (
-                    // @ts-ignore
-                    <div>{formik.errors[field.key]}</div>
-                  ) : null}
-                </div>
+              {Object.keys(specification).map((field) => (
+                <>
+                  <FormFieldContainer key={field}>
+                    <FormLabel htmlFor={field}>
+                      {specification[field].label}
+
+                      {formik.touched[field] && formik.errors[field] ? (
+                        <div>{formik.errors[field]}</div>
+                      ) : null}
+                    </FormLabel>
+                    <Input
+                      style={{ flex: 2 }}
+                      type="number"
+                      step="any"
+                      id={field}
+                      // error={!!formik.touched[field] && !!formik.errors[field]}
+                      error
+                      {...formik.getFieldProps(field)}
+                    />
+                    <FormRightLabel htmlFor={field}>
+                      {specification[field].unit} - {specification[field].comments}
+                    </FormRightLabel>
+                  </FormFieldContainer>
+                </>
               ))}
             </div>
             <Button type="submit" fluid>
-              Submit
+              Request prediction
             </Button>
           </Form>
         )}

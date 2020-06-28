@@ -1,3 +1,7 @@
+export type TestPrediction = {
+  prediction: string;
+};
+
 export type BloodExamData = {
   age: number;
   hematocrit: number;
@@ -14,9 +18,15 @@ export type BloodExamData = {
   mcv: number;
   monocytes: number;
   rdw: number;
-  c_reactive_number: number;
+  c_reactive_protein: number;
 };
 
-export type TestPrediction = {
-  prediction: string;
+/** Specifies an entry belonging to a blood exam */
+export type BloodExamEntry<T> = {
+  label: string;
+  unit: string;
+  comments?: string;
 };
+
+/** Blood exam specification */
+export type BloodExamSpecification = { [key: string]: BloodExamEntry<number> };

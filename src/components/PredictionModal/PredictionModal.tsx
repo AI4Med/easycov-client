@@ -1,16 +1,7 @@
 import React from "react";
-import { Modal, Button, Placeholder, Message } from "semantic-ui-react";
+import { Modal, Button, Message, Loader, Dimmer } from "semantic-ui-react";
 import { TestPrediction } from "../../service/types";
 
-const placeholder = (
-  <Placeholder>
-    <Placeholder.Line />
-    <Placeholder.Line />
-    <Placeholder.Line />
-    <Placeholder.Line />
-    <Placeholder.Line />
-  </Placeholder>
-);
 interface PredictionProps {
   prediction: string;
 }
@@ -38,15 +29,20 @@ const PredictionModal: React.FC<PredictionModalProps> = ({ onClose, testPredicti
       <Modal.Header>Requested prediction for Covid-19</Modal.Header>
       <Modal.Content>
         {error ? (
-          // @ts-ignore
-          <p>{error.message}</p>
+          <>
+            // @ts-ignore
+            <p>{error.message}</p>
+            <p>{JSON.stringify(error)}</p>
+          </>
         ) : testPrediction ? (
           <Modal.Description>
             <p>Your requested prediction was:</p>
             <Prediction prediction={testPrediction.prediction} />
           </Modal.Description>
         ) : (
-          placeholder
+          <Dimmer active>
+            <Loader size="large">Your request is being processed.</Loader>
+          </Dimmer>
         )}
       </Modal.Content>
       <Modal.Actions>

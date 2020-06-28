@@ -1,20 +1,21 @@
 import React from "react";
 import BloodExamForm from "../../components/BloodExamForm/BloodExamForm";
-import { Container, Header, Segment } from "semantic-ui-react";
-import { bloodExamFields } from "../../service/blood-exam-fields";
+import { Container, Segment, Divider } from "semantic-ui-react";
 import PredictionModal from "../../components/PredictionModal/PredictionModal";
 import { TestPrediction, BloodExamData } from "../../service/types";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { ServiceApi } from "../../service/api";
 import DisclaimerModal from "../../components/DisclaimerModal/DisclaimerModal";
 import { useHistory } from "react-router-dom";
 
 const Home: React.FC = () => {
   const [mutate] = useMutation<TestPrediction, BloodExamData>(ServiceApi.requestPrediction);
+  const { data, status } = useQuery("specification", ServiceApi.requestBloodExamSpeficiation);
+
   const [showResultModal, setShowResultModal] = React.useState<boolean>(false);
-  const [showDisclaimerModal, setShowDisclaimerModal] = React.useState<boolean>(true);
+  const [showDisclaimerModal, setShowDisclaimerModal] = React.useState<boolean>(false);
   const [testPrediction, setTestPrediction] = React.useState<TestPrediction | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
+  const [formError, setFormError] = React.useState<string | null>(null);
   const history = useHistory();
 
   const formSubmitHandler = (bloodExamData: BloodExamData) => {
@@ -23,18 +24,18 @@ const Home: React.FC = () => {
     mutate(bloodExamData, {
       onSuccess: (data) => {
         setTestPrediction(data);
-        setError(null);
+        setFormError(null);
       },
       onError: (error) => {
         //@ts-ignore
         const err: string = error;
-        setError(err);
+        setFormError(err);
       },
     });
   };
 
   const modalCloseHandler = () => {
-    setError(null);
+    setFormError(null);
     setTestPrediction(null);
     setShowResultModal(false);
   };
@@ -51,17 +52,25 @@ const Home: React.FC = () => {
   return (
     <div>
       <Container text style={{ margin: "2%" }}>
-        <Segment>
-          <Header textAlign="center">Pleaser fill out the form to get a prediction</Header>
-          <BloodExamForm fields={bloodExamFields} onSubmit={formSubmitHandler} />
-        </Segment>
+        {status === "success" ? (
+          <Segment>
+            <p>Fill the form below to request a covid-19 diagnosis prediction.</p>
+            <Divider />
+
+            {data ? <BloodExamForm specification={data} onSubmit={formSubmitHandler} /> : null}
+          </Segment>
+        ) : status === "loading" ? (
+          <p>Loading form...</p>
+        ) : (
+          <p>Something went wrong</p>
+        )}
       </Container>
 
       {/* Result Modal */}
       {showResultModal ? (
         <PredictionModal
           testPrediction={testPrediction}
-          error={error}
+          error={formError}
           onClose={modalCloseHandler}
         />
       ) : null}
