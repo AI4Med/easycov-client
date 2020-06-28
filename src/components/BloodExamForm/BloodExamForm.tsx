@@ -4,6 +4,7 @@ import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { BloodExamSpecification } from "../../service/types";
 import styled from "styled-components";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const mustBeNumber = () => new Yup.number("Must be a number").required("Required");
 
@@ -22,6 +23,11 @@ const FormLabel = styled.label`
 const FormRightLabel = styled.label`
   margin-left: 10px;
   flex: 1;
+`;
+
+const CaptchaContainer = styled.div`
+  margin: auto;
+  padding: 10px;
 `;
 
 interface BloodExamFormProps {
@@ -49,7 +55,7 @@ const BloodExamForm: React.FC<BloodExamFormProps> = ({ specification, onSubmit }
   );
 
   const submitHandler = (values: any, helpers: FormikHelpers<any>) => {
-    helpers.resetForm();
+    // helpers.resetForm();
     onSubmit(values);
   };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Header, Divider } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const Home: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const Home: React.FC = () => {
           (https://bit.ly/2xNTes8). Our article preprint is already available online:
           https://www.medrxiv.org/content/10.1101/2020.04.10.20061036v2.
         </p>
+        <Link to="/prediction">Click here to try it out</Link>
         <Header as="h3">Performance</Header>
         <Divider />
         <p>
