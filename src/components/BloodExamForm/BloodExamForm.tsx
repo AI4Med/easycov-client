@@ -24,11 +24,6 @@ const FormRightLabel = styled.label`
   flex: 1;
 `;
 
-const CaptchaContainer = styled.div`
-  margin: auto;
-  padding: 10px;
-`;
-
 interface BloodExamFormProps {
   specification: BloodExamSpecification;
   onSubmit: (bloodExamData: any) => void;
