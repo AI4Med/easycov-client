@@ -9,10 +9,10 @@ const Home: React.FC = () => {
         <Header as="h3">About this project</Header>
         <Divider />
         <p>
-          EasyCoV (formerly ER-CoV) is a framework backed by Artificial Intelligence (AI) that uses
-          simple blood exams to help predicting Covid-19 diagnosis. our focus is to determine which
-          patients are likely to be negative for the coronavirus, such that more specific exams can
-          be prioritized for those deemed as likely positive.
+          EasyCoV is a framework backed by Artificial Intelligence (AI) that uses simple blood exams
+          to help predicting Covid-19 diagnosis. our focus is to determine which patients are likely
+          to be negative for the coronavirus, such that more specific exams can be prioritized for
+          those deemed as likely positive.
         </p>
         <p>
           To the best of our knowledge, this is the first solution of its kind. We developed a

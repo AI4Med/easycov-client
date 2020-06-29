@@ -12,7 +12,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gcp-build": "npm run build"
+    "deploy": "gsutil rsync -R . gs://easycov.fcgomes.xyz"
   },
   "eslintConfig": {
     "extends": "react-app"
