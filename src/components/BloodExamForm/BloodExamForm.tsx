@@ -4,7 +4,6 @@ import { Formik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import { BloodExamSpecification } from "../../service/types";
 import styled from "styled-components";
-import ReCAPTCHA from "react-google-recaptcha";
 
 const mustBeNumber = () => new Yup.number("Must be a number").required("Required");
 
