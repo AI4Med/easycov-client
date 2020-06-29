@@ -19,7 +19,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onAccept, onDec
               The results of this tool do not replace any tests such as RT-PCR or IgG/IgM antibody
               detection.
             </p>
-            <p>We are not responsible for how you use this tool. TODO: actual disclaimer</p>
+            <p>We are not responsible for how you use this tool.</p>
           </Modal.Description>
         </Modal.Content>
         <Modal.Actions>
