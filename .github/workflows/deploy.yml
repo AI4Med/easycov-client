@@ -23,7 +23,6 @@ jobs:
       - name: Install Packages
         run: npm install
 
-      - name: "Authenticate on GCS"
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: "290.0.1"
